@@ -6,8 +6,11 @@ SHELL := /bin/bash
 
 all: test-strict_fstream ztxtpipe zpipe zc
 
+clean:
+	rm -rf test-strict_fstream ztxtpipe zpipe zc
+
 %: %.cpp
-	g++ -std=c++11 -O0 -g3 -ggdb -fno-eliminate-unused-debug-types -Wall -Wextra -pedantic -I../src -o $@ $^ -lz
+	g++ -std=c++11 -O0 -g3 -ggdb -fno-eliminate-unused-debug-types -Wall -Wextra -pedantic -I../include -o $@ $^ -lz
 
 test: ztxtpipe zpipe zc
 	diff -q ztxtpipe.cpp <(./ztxtpipe <ztxtpipe.cpp)
@@ -41,5 +44,3 @@ test: ztxtpipe zpipe zc
 	diff -q <(cat zc.cpp zc.cpp) <({ ./zc -c zc.cpp; gzip <zc.cpp; } | zcat)
 	@echo "all passed"
 
-clean:
-	rm -rf test-strict_fstream ztxtpipe zpipe zc
